@@ -14,4 +14,26 @@ WHERE primary_skill LIKE '% %'
  	where surname NOT LIKE '%.%'
 
  --***Task  3--
-  --
+  --Select number of students passed exams for each subject and order result by number of student descending
+SELECT subject_id,  count(DISTINCT student_id) as count_students
+	FROM public.exam_result
+	where mark is not null
+	group by subject_id
+	order by count_students desc;
+
+ --***Task  4--
+  --Select number of students with the same exam marks for each subject
+
+SELECT subject_id, mark ,  count(DISTINCT student_id) as count_students
+	FROM public.exam_result
+	where mark is not null
+	group by subject_id, mark
+
+--***Task  5--
+--Select students who passed at least two exams for different subject.
+SELECT student_id,
+       COUNT(DISTINCT subject_id) AS subject_count
+FROM public.exam_result
+WHERE mark IS NOT NULL
+GROUP BY student_id
+HAVING COUNT(DISTINCT subject_id) >= 2;
