@@ -37,3 +37,35 @@ FROM public.exam_result
 WHERE mark IS NOT NULL
 GROUP BY student_id
 HAVING COUNT(DISTINCT subject_id) >= 2;
+--***Task  6--
+--Select students who passed at least two exams for the same subject.
+SELECT student_id,
+       subject_id,
+       COUNT(*) AS exam_count
+FROM public.exam_result
+WHERE mark IS NOT NULL
+GROUP BY student_id, subject_id
+HAVING COUNT(*) >1;
+
+--***Task  7--
+--Select all subjects which exams passed only students with the same primary skills.
+SELECT subject.id, subject.name
+FROM subject
+JOIN exam_result ON subject.id = exam_result.subject_id
+JOIN student ON exam_result.student_id = student.id
+WHERE exam_result.mark IS NOT NULL
+GROUP BY subject.id, subject.name
+HAVING COUNT(DISTINCT student.primary_skill) = 1;
+
+--***Task  8--
+--Select all subjects which exams passed only students with the different primary skills.
+--It means that all students passed the exam for the one subject must have different primary skill
+SELECT subject.id, subject.name
+FROM subject
+JOIN exam_result ON subject.id = exam_result.subject_id
+JOIN student ON exam_result.student_id = student.id
+WHERE exam_result.mark IS NOT NULL
+GROUP BY subject.id, subject.name
+HAVING COUNT(student.id) = COUNT(DISTINCT student.primary_skill);
+--***Task  9--
+--
