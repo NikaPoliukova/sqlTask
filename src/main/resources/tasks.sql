@@ -145,7 +145,7 @@ LIMIT 5
   ORDER BY s.id;
 
 
---***Task  1--
+--***Task  13--
 --Select number of all marks for each mark type (‘BAD’, ‘AVERAGE’,…)
 SELECT
     CASE
