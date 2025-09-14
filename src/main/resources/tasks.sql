@@ -95,4 +95,66 @@ WHERE NOT s.id = ANY (
     WHERE er.mark IS NOT NULL
 );
 --***Task  10--
---
+--Select all students whose average mark is bigger than overall average mark
+SELECT s.id, s.name, AVG(er.mark) AS avgcount
+FROM student s
+JOIN exam_result er ON s.id = er.student_id
+GROUP BY s.id, s.name
+HAVING AVG(er.mark) > (
+    SELECT AVG(mark)
+    FROM exam_result
+    WHERE mark IS NOT NULL
+)
+--***Task  11--
+--Select top 5 students who passed their last exam better than average students.
+SELECT s.id, s.name, AVG(er.mark) AS avgcount
+FROM student s
+JOIN exam_result er ON s.id = er.student_id
+GROUP BY s.id, s.name
+HAVING AVG(er.mark) > (
+    SELECT AVG(mark)
+    FROM exam_result
+    WHERE mark IS NOT NULL
+)
+ORDER BY avgcount DESC
+LIMIT 5
+--***Task  12--
+--Select biggest mark for each student and add text description for the mark (use COALESCE and WHEN operators)
+  -- In case if student has not passed any exam ‘not passed' should be returned.
+  --If student mark is 1,2,3 – it should be returned as ‘BAD’
+  --If student mark is 4,5,6 – it should be returned as ‘AVERAGE’
+  --If student mark is 7,8 – it should be returned as ‘GOOD’
+  --If student mark is 9,10 – it should be returned as ‘EXCELLENT’
+
+  SELECT
+      s.id,
+      s.name,
+      COALESCE(
+          CASE
+              WHEN MAX(er.mark) BETWEEN 1 AND 3 THEN 'BAD'
+              WHEN MAX(er.mark) BETWEEN 4 AND 6 THEN 'AVERAGE'
+              WHEN MAX(er.mark) BETWEEN 7 AND 8 THEN 'GOOD'
+              WHEN MAX(er.mark) BETWEEN 9 AND 10 THEN 'EXCELLENT'
+          END,
+          'not passed'
+      ) AS mark_description
+  FROM student s
+  LEFT JOIN exam_result er
+      ON s.id = er.student_id
+  GROUP BY s.id, s.name
+  ORDER BY s.id;
+
+
+--***Task  1--
+--Select number of all marks for each mark type (‘BAD’, ‘AVERAGE’,…)
+SELECT
+    CASE
+        WHEN mark BETWEEN 1 AND 3 THEN 'BAD'
+        WHEN mark BETWEEN 4 AND 6 THEN 'AVERAGE'
+        WHEN mark BETWEEN 7 AND 8 THEN 'GOOD'
+        WHEN mark BETWEEN 9 AND 10 THEN 'EXCELLENT'
+    END AS mark_type,
+    COUNT(*) AS count_marks
+FROM exam_result
+WHERE mark IS NOT NULL
+GROUP BY mark_type
