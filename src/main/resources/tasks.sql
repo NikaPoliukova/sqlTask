@@ -68,4 +68,31 @@ WHERE exam_result.mark IS NOT NULL
 GROUP BY subject.id, subject.name
 HAVING COUNT(student.id) = COUNT(DISTINCT student.primary_skill);
 --***Task  9--
+--Select students who does not pass any exam using each the following operator:
+ -- 1) Outer join
+SELECT s.id, s.name
+FROM student s
+LEFT JOIN exam_result er
+    ON s.id = er.student_id
+GROUP BY s.id, s.name
+HAVING COUNT(er.mark) = 0;
+
+ -- 2)Subquery with ‘not in’ clause
+SELECT s.id, s.name
+FROM student s
+WHERE s.id NOT IN (
+    SELECT er.student_id
+    FROM exam_result er
+    WHERE er.mark IS NOT NULL
+);
+
+  --3)Subquery with ‘any ‘
+SELECT s.id, s.name
+FROM student s
+WHERE NOT s.id = ANY (
+    SELECT er.student_id
+    FROM exam_result er
+    WHERE er.mark IS NOT NULL
+);
+--***Task  10--
 --

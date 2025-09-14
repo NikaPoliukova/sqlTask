@@ -32,7 +32,10 @@ INSERT INTO subject (name, tutor) VALUES
 INSERT INTO exam_result (student_id, subject_id, mark) VALUES
 (1, 1, 9),
 (1, 2, 8),
-(1, 3, 5);
+(1, 3, 5),
+(1, 5, null),
+(1, 6, null),
+(1, 7, null);
 
 -- Student 2: different subjects
 INSERT INTO exam_result (student_id, subject_id, mark) VALUES
@@ -74,3 +77,6 @@ INSERT INTO exam_result (student_id, subject_id, mark) VALUES
 -- Student 10: only one exam
 INSERT INTO exam_result (student_id, subject_id, mark) VALUES
 (10, 4, 1);
+(22, 1, null);
+(22, 2, null);
+(22, 3, null);
